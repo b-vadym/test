@@ -1,4 +1,6 @@
 .idea
+/node_modules/
+.allow_unsafe_bins
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -23,7 +25,6 @@
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
-/node_modules/
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

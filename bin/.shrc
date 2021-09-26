@@ -1,0 +1,109 @@
+set -ue
+
+SHRC_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+. "$SHRC_DIR/.config"
+
+__verify_config() {
+    for name in BASE_DIR SYMFONY_CONSOLE; do
+        local value
+        eval "value=\"\${$name:-}\""
+        if [ -z "$value" ]; then
+            echo "Required env parameter '$name' is not set"
+            exit 1
+        fi
+    done
+}
+
+__load_env() {
+    local app_env_local="${APP_ENV:-}"
+
+    . "$BASE_DIR/.env"
+
+    if [ -f "$BASE_DIR/.env.local" ]; then
+        . "$BASE_DIR/.env.local"
+    fi
+
+    if  [ -n "$app_env_local" ]; then
+        APP_ENV="$app_env_local"
+    fi
+
+    if [ -z "${APP_ENV:-}" ]; then
+        APP_ENV="dev"
+    fi
+
+    if [ -f "$BASE_DIR/.env.$APP_ENV" ]; then
+        . "$BASE_DIR/.env.$APP_ENV"
+    fi
+
+    if [ -f "$BASE_DIR/.env.$APP_ENV.local" ]; then
+        . "$BASE_DIR/.env.$APP_ENV.local"
+    fi
+}
+
+unsafe_bin() {
+    if [ ! -z "${UNSAFE_BINS_FLAG:-}" -a ! -f "$UNSAFE_BINS_FLAG" ]; then
+        echo "The script '$0' is unsafe and can lead to data loss. If nevertheless you want to run it, create file '$UNSAFE_BINS_FLAG'"
+        exit 1
+    fi
+}
+
+exec_console() {
+    docker-compose exec app bin/console "$@"
+}
+
+exec_composer() {
+     docker-compose exec app composer "$@"
+}
+
+exec_yarn() {
+    docker-compose run --rm node yarn "$@"
+}
+
+exec_bin() {
+    local bin="$1"
+    shift
+    "$BIN_DIR/$bin" "$@"
+}
+
+exec_vendor_bin() {
+    local bin="$1"
+    shift
+    "$VENDOR_BIN_DIR/$bin" "$@"
+}
+
+write_title() {
+    echo "======= $@"
+}
+
+write_line() {
+    echo " * $@"
+}
+
+get_switch() {
+    if [ ! -z "$2" ]; then
+        echo -n "$1$2"
+    fi
+}
+
+parse_database_url() {
+    local url="$1"
+    local var_prefix="$2"
+
+    eval "$(cat <<- EOM | php -- "$url" "$var_prefix"
+<?php isset(\$argv[1]) || exit(1);
+\$parsed = parse_url(\$argv[1]); \$prefix = \$argv[2] ?? "";
+foreach (['host'=>'','port'=>'','user'=>'','pass'=>'','path'=>''] as \$k => \$v) {
+if (isset(\$parsed[\$k])) { \$v = \$parsed[\$k]; };
+if (\$k === 'path') { \$k = 'name'; \$v = substr(\$v, 1); }
+echo \$prefix.strtoupper(\$k)."=\"{\$v}\"\n";
+}
+EOM
+)"
+}
+
+__load_env
+__verify_config
+unset -f __verify_config
+
+cd $BASE_DIR

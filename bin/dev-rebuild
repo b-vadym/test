@@ -1,0 +1,106 @@
+#!/bin/sh
+
+set -eu
+. "$(dirname $0)/.shrc"
+
+unsafe_bin
+
+vendor=""
+db=""
+assets=""
+all=""
+workers=""
+
+if [ -z "$@" ]; then
+    all="y"
+else
+    for arg in "$@"; do
+        case "$arg" in
+            vendor|v)
+                vendor="y"
+            ;;
+
+            db|d)
+                db="y"
+            ;;
+
+            assets|a)
+                assets="y"
+            ;;
+
+            workers|w)
+                workers="y"
+            ;;
+
+            *)
+                echo "Usage: $0 (vendor|v|db|d|assets|a|workers|w)*" >&2
+                exit 1
+            ;;
+        esac
+    done
+fi
+
+docker-compose up -d
+
+#if [ ! -z "$all" -o ! -z "$workers" ]; then
+#    set +e
+#        "$HOME/.supervisor/bin/sv-ctl" status tret: >/dev/null 2>&1
+#        errcode=$?
+#    set -e
+#
+#    if [ "$errcode" -ne 4 ]; then
+#        write_title "Stopping background workers"
+#        "$HOME/.supervisor/bin/sv-ctl" stop tret:
+#    fi
+#fi
+
+write_title "Clearing cache"
+exec_bin clear-cache
+
+if [ ! -z "$all" -o ! -z "$vendor" ]; then
+    write_title "Installing vendors (dev env)"
+    exec_composer install --no-interaction
+#    exec_composer bin all install --no-interaction
+fi
+
+
+write_title "Warming up cache"
+exec_console cache:warmup
+
+
+if [ ! -z "$all" -o ! -z "$db" ]; then
+    set +e
+    write_title "Dropping databases"
+    exec_console doctrine:database:drop --force --quiet
+    set -e
+
+    write_title "Creating databases"
+    exec_console doctrine:database:create
+
+    write_title "Updating database schema"
+    exec_console doctrine:schema:update --force
+
+    write_title "Setting all migrations as migrated"
+    exec_console doctrine:migrations:sync-metadata-storage --no-interaction
+    exec_console doctrine:migrations:version --add --all --no-interaction
+
+    write_title "Loading fixtures"
+    exec_console doctrine:fixtures:load --append
+fi
+
+
+if [ ! -z "$all" -o ! -z "$assets" ]; then
+    write_title "Installing assets"
+    exec_console assets:install --symlink
+    exec_yarn install
+    exec_yarn encore dev
+fi
+#
+#if [ ! -z "$all" -o ! -z "$workers" ]; then
+#    write_title "Installing workers config"
+#    "$HOME/.supervisor/bin/sv-install" -u .supervisor.conf tret
+#    "$HOME/.supervisor/bin/sv-ctl" update
+#
+#    write_title "Starting background workers"
+#    "$HOME/.supervisor/bin/sv-ctl" start tret:
+#fi
