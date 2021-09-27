@@ -60,7 +60,7 @@ exec_bin clear-cache
 if [ ! -z "$all" -o ! -z "$vendor" ]; then
     write_title "Installing vendors (dev env)"
     exec_composer install --no-interaction
-#    exec_composer bin all install --no-interaction
+    exec_composer bin all install --no-interaction
 fi
 
 

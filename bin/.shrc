@@ -49,11 +49,11 @@ unsafe_bin() {
 }
 
 exec_console() {
-    docker-compose exec app bin/console "$@"
+    docker-compose exec php bin/console "$@"
 }
 
 exec_composer() {
-     docker-compose exec app composer "$@"
+     docker-compose exec php composer "$@"
 }
 
 exec_yarn() {
