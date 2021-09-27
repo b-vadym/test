@@ -5,6 +5,9 @@
     "amphp/byte-stream": {
         "version": "v1.8.1"
     },
+    "bamarni/composer-bin-plugin": {
+        "version": "1.4.1"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.3"
     },
@@ -121,23 +124,8 @@
     "felixfbecker/language-server-protocol": {
         "version": "1.5.1"
     },
-    "friendsofphp/php-cs-fixer": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "be2103eb4a20942e28a6dd87736669b757132435"
-        },
-        "files": [
-            ".php-cs-fixer.dist.php"
-        ]
-    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
-    },
-    "kubawerlos/php-cs-fixer-custom-fixers": {
-        "version": "v2.5.0"
     },
     "laminas/laminas-code": {
         "version": "4.4.2"
@@ -157,17 +145,11 @@
     "openlss/lib-array2xml": {
         "version": "1.0.0"
     },
-    "pedrotroller/php-cs-custom-fixer": {
-        "version": "v2.25.1"
-    },
     "phar-io/manifest": {
         "version": "2.0.3"
     },
     "phar-io/version": {
         "version": "3.1.0"
-    },
-    "php-cs-fixer/diff": {
-        "version": "v2.0.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -682,9 +664,6 @@
     },
     "vimeo/psalm": {
         "version": "4.10.0"
-    },
-    "visual-craft/php-cs-fixer-config": {
-        "version": "v0.1.0"
     },
     "webmozart/assert": {
         "version": "1.10.0"

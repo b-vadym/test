@@ -5,13 +5,38 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    ignoreInternalFunctionFalseReturn="false"
+    ignoreInternalFunctionNullReturn="false"
+    ensureArrayStringOffsetsExist="true"
+    sealAllMethods="true"
+    cacheDirectory="var/psalm"
+    findUnusedCode="true"
+    findUnusedVariablesAndParams="true"
+    findUnusedPsalmSuppress="true"
 >
     <projectFiles>
         <directory name="src"/>
         <ignoreFiles>
             <directory name="vendor"/>
+            <directory name="vendor-bin"/>
         </ignoreFiles>
     </projectFiles>
+    <issueHandlers>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <referencedProperty name="Doctrine\ORM\EntityRepository::$_entityName"/>
+                <referencedProperty name="Doctrine\ORM\EntityRepository::$_em"/>
+                <referencedProperty name="Doctrine\ORM\EntityRepository::$_class"/>
+                <referencedProperty name="Doctrine\Common\DataFixtures\AbstractFixture::$referenceRepository"/>
+                <referencedProperty name="Symfony\Bundle\FrameworkBundle\Controller\AbstractController::$container"/>
+                <referencedProperty name="Psr\Log\LoggerAwareTrait::$logger"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+        <!-- suppress dead code issues-->
+        <UnusedClass errorLevel="suppress"/>
+        <PossiblyUnusedMethod errorLevel="suppress"/>
+        <PossiblyUnusedProperty errorLevel="suppress"/>
+    </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>

@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -19,7 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var string
@@ -29,9 +30,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var list<string>
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="simple_array")
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var string The hashed password
@@ -39,15 +40,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $password;
 
-    public function __construct($email, array $roles, string $password)
+    /**
+     * @param list<string> $roles
+     */
+    public function __construct(string $email, array $roles, string $password)
     {
         $this->email = $email;
         $this->roles = $roles;
         $this->password = $password;
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
+        Assert::notNull($this->id);
+
         return $this->id;
     }
 
@@ -64,17 +70,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
+     * @return list<string>
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
+    /**
+     * @param list<string> $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -104,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -112,7 +118,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**

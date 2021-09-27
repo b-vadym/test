@@ -1,0 +1,5 @@
+{
+    "require": {
+        "visual-craft/php-cs-fixer-config": "^0.1.0"
+    }
+}

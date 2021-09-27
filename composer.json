@@ -48,6 +48,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.4",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.16.1",
         "psalm/plugin-symfony": "^3.0",
@@ -59,7 +60,6 @@
         "symfony/stopwatch": "5.3.*",
         "symfony/web-profiler-bundle": "5.3.*",
         "vimeo/psalm": "^4.10",
-        "visual-craft/php-cs-fixer-config": "^0.1.0",
         "weirdan/doctrine-psalm-plugin": "^1.1"
     },
     "config": {
@@ -85,8 +85,8 @@
         "symfony/polyfill-php72": "*"
     },
     "scripts": {
-        "cs-check": "php-cs-fixer fix --dry-run --diff -v --ansi",
-        "cs-fix": "php-cs-fixer fix --diff -v --ansi",
+        "cs-check": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff -v --ansi",
+        "cs-fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff -v --ansi",
         "psalm": "psalm",
         "lint": [
             "@cs-fix",
@@ -97,6 +97,9 @@
         "symfony/symfony": "*"
     },
     "extra": {
+        "bamarni-bin": {
+            "bin-links": false
+        },
         "symfony": {
             "allow-contrib": false,
             "require": "5.3.*"
