@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  app:
+  php:
     build:
       args:
         user: vadym
@@ -32,7 +32,7 @@ services:
       - ./:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
     links:
-      - app
+      - php
 
   adminer:
     image: adminer
