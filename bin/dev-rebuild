@@ -44,13 +44,13 @@ docker-compose up -d
 
 #if [ ! -z "$all" -o ! -z "$workers" ]; then
 #    set +e
-#        "$HOME/.supervisor/bin/sv-ctl" status tret: >/dev/null 2>&1
+#        "$HOME/.supervisor/bin/sv-ctl" status test-docker: >/dev/null 2>&1
 #        errcode=$?
 #    set -e
 #
 #    if [ "$errcode" -ne 4 ]; then
 #        write_title "Stopping background workers"
-#        "$HOME/.supervisor/bin/sv-ctl" stop tret:
+#        "$HOME/.supervisor/bin/sv-ctl" stop test-docker:
 #    fi
 #fi
 
@@ -98,9 +98,9 @@ fi
 #
 #if [ ! -z "$all" -o ! -z "$workers" ]; then
 #    write_title "Installing workers config"
-#    "$HOME/.supervisor/bin/sv-install" -u .supervisor.conf tret
+#    "$HOME/.supervisor/bin/sv-install" -u .supervisor.conf test-docker
 #    "$HOME/.supervisor/bin/sv-ctl" update
 #
 #    write_title "Starting background workers"
-#    "$HOME/.supervisor/bin/sv-ctl" start tret:
+#    "$HOME/.supervisor/bin/sv-ctl" start test-docker:
 #fi
