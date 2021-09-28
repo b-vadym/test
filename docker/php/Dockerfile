@@ -25,6 +25,9 @@ RUN pecl install -o -f redis \
 ##zsh
 RUN apt-get update && apt-get install -y zsh fonts-powerline
 
+##xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 # Get latest Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
