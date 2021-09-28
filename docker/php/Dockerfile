@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    nano
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -21,6 +22,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath
 RUN pecl install -o -f redis \
 &&  rm -rf /tmp/pear \
 &&  docker-php-ext-enable redis
+##zsh
+RUN apt-get update && apt-get install -y zsh
 
 # Get latest Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -34,3 +37,5 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 USER $user
+
+RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
