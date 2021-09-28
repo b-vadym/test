@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -eu
+. "$(dirname $0)/.shrc"
+
+unsafe_bin
+
+
+dump_file="${1:-}"
+
+if [ -z "$dump_file" -o ! -f "$dump_file" ]; then
+    echo "You should provide valid path to database dump file"
+    exit 1
+fi
+
+parse_database_url "$DATABASE_URL" "DB_"
+
+write_title "Importing dump"
+zcat "$dump_file" | MYSQL_PWD="$DB_PASS" mysql \
+    $(get_switch "-u " "$DB_USER") \
+    $(get_switch "-h " "$DB_HOST") \
+    $(get_switch "-P " "$DB_PORT") \
+    "$DB_NAME"
