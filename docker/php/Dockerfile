@@ -23,7 +23,7 @@ RUN pecl install -o -f redis \
 &&  rm -rf /tmp/pear \
 &&  docker-php-ext-enable redis
 ##zsh
-RUN apt-get update && apt-get install -y zsh
+RUN apt-get update && apt-get install -y zsh fonts-powerline
 
 # Get latest Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -38,4 +38,9 @@ WORKDIR /var/www
 
 USER $user
 
-RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
+RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
+   -t powerlevel10k/powerlevel10k  \
+   -p composer  \
+   -p symfony2  \
+   -p zsh-autosuggestions  \
+   -p https://github.com/zsh-users/zsh-autosuggestions
