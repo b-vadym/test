@@ -16,8 +16,9 @@ fi
 parse_database_url "$DATABASE_URL" "DB_"
 
 write_title "Importing dump"
-zcat "$dump_file" | MYSQL_PWD="$DB_PASS" mysql \
+
+zcat "$dump_file" | docker-compose exec -T -e MYSQL_PWD=$(get_switch "" "$DB_PASS") db mysql \
     $(get_switch "-u " "$DB_USER") \
-    $(get_switch "-h " "$DB_HOST") \
-    $(get_switch "-P " "$DB_PORT") \
     "$DB_NAME"
+
+write_line "Restore dump mysql done"

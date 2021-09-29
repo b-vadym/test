@@ -14,10 +14,9 @@ dump_name="${1:-}"
 dump_file=""
 
 if [ -z "$dump_name" ]; then
-    dump_file="$(mktemp -p "$base_dump_dir" $(date "+%Y%m%d%H%M%S")-XXXXXX.sql.gz)"
+    dump_file="$(mktemp -p "$base_dump_dir" $(date "+%Y%m%d%H%M%S")-XXXXXX.sql)"
 else
-    dump_file="$base_dump_dir/${dump_name}.sql.gz"
-
+    dump_file="$base_dump_dir/${dump_name}.sql"
     if [ -f "$dump_file" ]; then
         echo "Database dump file already exists"
         exit 1
@@ -29,13 +28,16 @@ parse_database_url "$DATABASE_URL" "DB_"
 docker-compose up -d
 
 write_title "Dumping MySQL database"
-MYSQL_PWD="$DB_PASS" docker-compose exec db mysqldump \
+
+docker-compose exec -e MYSQL_PWD=$(get_switch "" "$DB_PASS") db mysqldump \
     --skip-add-drop-table --skip-add-locks --skip-comments --add-drop-database --databases \
     $(get_switch "-u " "$DB_USER") \
     $(get_switch "-h " "$DB_HOST") \
     $(get_switch "-P " "$DB_PORT") \
     "$DB_NAME" \
-    | gzip -c > "$dump_file"
+    > "$dump_file"
+
+gzip "$dump_file"
 
 write_line "Dump successfully created:"
-echo "$dump_file"
+echo "${dump_file}.gz"
