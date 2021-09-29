@@ -16,6 +16,7 @@ services:
       - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
       - ./var/composer/:/home/vadym/.composer/
+      - ./var/www/.git/
     links:
       - db
       - redis
@@ -59,6 +60,7 @@ services:
     volumes:
       - ./:/var/www
       - ./var/yarn/:/home/vadym/.cache/yarn/
+      - ./var/www/.git/
 
   redis:
     image: "redis:6.2"
