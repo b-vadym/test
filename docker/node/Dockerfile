@@ -7,7 +7,7 @@ ARG uid
 # Create system user to run node
 RUN userdel -r node
 RUN useradd -G root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.npm && \
+RUN mkdir -p /home/$user/.cache && \
     chown -R $user:$user /home/$user
 
 # Set working directory

@@ -58,6 +58,7 @@ services:
       dockerfile: docker/node/Dockerfile
     volumes:
       - ./:/var/www
+      - ./var/yarn/:/home/vadym/.cache/yarn/
 
   redis:
     image: "redis:6.2"
