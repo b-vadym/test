@@ -69,6 +69,8 @@ exec_console cache:warmup
 
 
 if [ ! -z "$all" -o ! -z "$db" ]; then
+    docker-compose exec php bin/mysql-check-alive
+
     set +e
     write_title "Dropping databases"
     exec_console doctrine:database:drop --force --quiet

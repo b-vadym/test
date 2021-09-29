@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -eu
+. "$(dirname $0)/.shrc"
+
+
+DB_WAITING_TIMEOUT="${DB_WAITING_TIMEOUT:-60}"
+if ! test "$DB_WAITING_TIMEOUT" -le "3600" 2>/dev/null; then
+    echo "Invalid DB_WAITING_TIMEOUT value, it should be int and be less than or equal 3600"
+    exit 1
+fi
+
+parse_database_url "$DATABASE_URL" "DB_"
+
+connect_to_mysql() {
+    php -r "error_reporting(0); new PDO('mysql:host=$DB_HOST:$DB_PORT', '$DB_USER', '$DB_PASS');"
+}
+
+if [ -z "$DB_WAITING_TIMEOUT" -o "$DB_WAITING_TIMEOUT" -le 0 ]; then
+    if connect_to_mysql; then
+        echo "Ok" >&2
+        exit 0
+    fi
+
+    echo "Fail" >&2
+    exit 255
+fi
+
+START="$(date +%s)"
+
+while ! connect_to_mysql; do
+    sleep 1
+    NOW="$(date +%s)"
+
+    if [ $((NOW - START)) -gt "$DB_WAITING_TIMEOUT" ]; then
+        echo "Fail" >&2
+        exit 255
+    fi
+done
+
+echo "Ok" >&2
