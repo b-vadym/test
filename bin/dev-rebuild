@@ -55,7 +55,7 @@ docker-compose up -d
 #fi
 
 write_title "Clearing cache"
-exec_bin clear-cache
+docker-compose exec php bin/clear-cache
 
 if [ ! -z "$all" -o ! -z "$vendor" ]; then
     write_title "Installing vendors (dev env)"
