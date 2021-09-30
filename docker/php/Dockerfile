@@ -28,18 +28,17 @@ RUN pecl install xdebug \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Arguments defined in docker-compose.yml
-ARG user
 ARG uid
 
 # Create system user to run Composer and Symfony commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user && \
-    chown -R $user:$user /home/$user
+RUN useradd -G www-data,root -u $uid -d /home/app app
+RUN mkdir -p /home/app && \
+    chown -R app:app /home/app
 
 # Set working directory
 WORKDIR /var/www
 
-USER $user
+USER app
 
 RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
    -t powerlevel10k/powerlevel10k  \
