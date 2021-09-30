@@ -19,6 +19,8 @@ services:
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
       - ./var/composer/:/home/app/.composer/
       - ./var/www/.git/
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     links:
       - db
       - redis
