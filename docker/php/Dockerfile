@@ -48,4 +48,11 @@ RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/downloa
    -p https://github.com/zsh-users/zsh-autosuggestions  \
    -p zsh-syntax-highlighting  \
    -p https://github.com/zsh-users/zsh-syntax-highlighting  \
-   -a "export TERM=xterm-256color"
+   -a "export TERM=xterm-256color" && \
+    echo "POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(user dir php_version newline)\n\
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=3\n\
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=0\n\
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time time)\n\
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='─'\n\
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=244\n\
+" >> /home/app/.zshrc
