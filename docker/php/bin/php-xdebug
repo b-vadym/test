@@ -1,0 +1,3 @@
+#!/bin/sh
+
+XDEBUG_CONFIG="idekey=PHPSTORM" php "$@"

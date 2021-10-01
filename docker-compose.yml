@@ -18,6 +18,7 @@ services:
       - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
       - ./var/composer/:/home/app/.composer/
+      - ./docker/php/bin/:/home/app/bin/
       - ./var/www/.git/
     extra_hosts:
       - "host.docker.internal:host-gateway"
