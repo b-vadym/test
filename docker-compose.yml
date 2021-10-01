@@ -13,6 +13,7 @@ services:
       - .env.local
     environment:
       PHP_IDE_CONFIG: serverName=Docker
+      TERM: xterm-256color
     volumes:
       - ./:/var/www
       - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
@@ -63,6 +64,8 @@ services:
     env_file:
       - .env
       - .env.local
+    environment:
+      TERM: xterm-256color
     volumes:
       - ./:/var/www
       - ./var/yarn/:/home/node/.cache/yarn/

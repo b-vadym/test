@@ -45,4 +45,7 @@ RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/downloa
    -p composer  \
    -p symfony2  \
    -p zsh-autosuggestions  \
-   -p https://github.com/zsh-users/zsh-autosuggestions
+   -p https://github.com/zsh-users/zsh-autosuggestions  \
+   -p zsh-syntax-highlighting  \
+   -p https://github.com/zsh-users/zsh-syntax-highlighting  \
+   -a "export TERM=xterm-256color"
