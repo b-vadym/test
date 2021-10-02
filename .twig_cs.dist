@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+use FriendsOfTwig\Twigcs\RegEngine\RulesetBuilder;
+use FriendsOfTwig\Twigcs\RegEngine\RulesetConfigurator;
+use FriendsOfTwig\Twigcs\Rule;
+use FriendsOfTwig\Twigcs\Ruleset\RulesetInterface;
+use FriendsOfTwig\Twigcs\Validator\Violation;
+
+class CustomRuleset implements RulesetInterface
+{
+    /**
+     * @var int
+     */
+    private $twigMajorVersion;
+
+    public function __construct(int $twigMajorVersion)
+    {
+        $this->twigMajorVersion = $twigMajorVersion;
+    }
+
+    public function getRules(): array
+    {
+        $configurator = new RulesetConfigurator();
+        $configurator->setTwigMajorVersion($this->twigMajorVersion);
+        $builder = new RulesetBuilder($configurator);
+
+        return [
+            //      new Rule\LowerCaseVariable(Violation::SEVERITY_ERROR),
+            new Rule\RegEngineRule(Violation::SEVERITY_ERROR, $builder->build()),
+            new Rule\TrailingSpace(Violation::SEVERITY_ERROR),
+            new Rule\UnusedMacro(Violation::SEVERITY_WARNING),
+            new Rule\UnusedVariable(Violation::SEVERITY_INFO),
+        ];
+    }
+}
+$finder = FriendsOfTwig\Twigcs\Finder\TemplateFinder::create()
+    ->in(__DIR__ . '/templates')
+;
+
+return FriendsOfTwig\Twigcs\Config\Config::create()
+    ->addFinder($finder)
+    ->setSeverity('warning')
+    ->setReporter('console')
+    ->setName('my-config')
+    ->setRuleSet(CustomRuleset::class)
+;

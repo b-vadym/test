@@ -11,6 +11,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/config')
     ->append([
         __DIR__ . '/.php-cs-fixer.dist.php',
+        __DIR__ . '/.twig_cs.dist',
     ])
 ;
 $config = PhpCsFixerConfig\Factory::fromRuleSet(new PhpCsFixerConfig\RuleSet\Php80());

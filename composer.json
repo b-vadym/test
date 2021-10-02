@@ -1,8 +1,8 @@
 {
+    "name": "vadimb/test",
     "type": "project",
+    "description": "project for test",
     "license": "proprietary",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "require": {
         "php": "^8.0",
         "ext-ctype": "*",
@@ -16,6 +16,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
         "ergebnis/classy": "^1.1",
+        "ergebnis/composer-normalize": "^2.15",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.3.*",
@@ -45,8 +46,16 @@
         "symfony/web-link": "5.3.*",
         "symfony/webpack-encore-bundle": "^1.12",
         "symfony/yaml": "5.3.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/extra-bundle": "^2.12 || ^3.0",
+        "twig/twig": "^2.12 || ^3.0"
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*"
+    },
+    "conflict": {
+        "symfony/symfony": "*"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",
@@ -70,6 +79,15 @@
         },
         "sort-packages": true
     },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": false
+        },
+        "symfony": {
+            "allow-contrib": false,
+            "require": "5.3.*"
+        }
+    },
     "autoload": {
         "psr-4": {
             "App\\": "src/"
@@ -80,31 +98,24 @@
             "App\\Tests\\": "tests/"
         }
     },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*"
-    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "scripts": {
         "cs-check": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --diff -v --ansi",
         "cs-fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff -v --ansi",
-        "psalm": "psalm",
         "lint": [
             "@cs-fix",
+            "bin/console lint:container",
             "bin/console app:lint-annotation",
-            "@psalm"
-        ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "bamarni-bin": {
-            "bin-links": false
-        },
-        "symfony": {
-            "allow-contrib": false,
-            "require": "5.3.*"
-        }
+            "@psalm",
+            "@composer validate --no-check-all",
+            "@composer normalize",
+            "bin/console lint:twig ./templates/ --show-deprecations",
+            "@twigcs",
+            "bin/console lint:yaml ./config/ --parse-tags",
+            "bin/console lint:yaml ./translations/"
+        ],
+        "psalm": "psalm",
+        "twigcs": "vendor-bin/twigcs/vendor/bin/twigcs --ansi"
     }
 }
