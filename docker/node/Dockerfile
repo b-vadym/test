@@ -26,6 +26,7 @@ RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/downloa
    -p zsh-syntax-highlighting  \
    -p https://github.com/zsh-users/zsh-syntax-highlighting  \
    -a "export TERM=xterm-256color" && \
+    echo "export HISTFILE=/home/node/zsh/.zsh_history\n$(cat /home/node/.zshrc)" > /home/node/.zshrc && \
     echo "POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(user dir node_version newline)\n\
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=3\n\
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=0\n\

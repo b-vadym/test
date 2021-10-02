@@ -20,6 +20,9 @@ services:
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
       - ./var/composer/:/home/app/.composer/
       - ./docker/php/bin/:/home/app/bin/
+      - ./docker/php/.bashrc:/home/app/.bashrc
+      - ./var/hist-php/:/home/app/bash/
+      - ./var/hist-php/:/home/app/zsh/
       - ./var/www/.git/
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -69,6 +72,9 @@ services:
     volumes:
       - ./:/var/www
       - ./var/yarn/:/home/node/.cache/yarn/
+      - ./docker/node/.bashrc:/home/node/.bashrc
+      - ./var/hist-node/:/home/node/bash/
+      - ./var/hist-node/:/home/node/zsh/
       - ./var/www/.git/
 
   redis:
