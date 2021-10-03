@@ -26,7 +26,7 @@ services:
       - ./var/www/.git/
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    links:
+    depends_on:
       - db
       - redis
 
@@ -47,7 +47,7 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
-    links:
+    depends_on:
       - php
 
   adminer:
@@ -55,7 +55,7 @@ services:
     ports:
       - '59002:8080'
     restart: unless-stopped
-    links:
+    depends_on:
       - db
 
   node:
@@ -91,3 +91,5 @@ services:
       - REDIS_HOSTS=redis:redis:6379
     ports:
       - "59003:8081"
+    depends_on:
+      - redis
