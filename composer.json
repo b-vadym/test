@@ -9,7 +9,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-redis": ">=4.3.0",
-        "composer/package-versions-deprecated": "1.11.99.3",
+        "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
