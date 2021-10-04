@@ -1,5 +1,8 @@
 FROM php:8.0-fpm
 
+# Arguments defined in docker-compose.yml
+ARG uid
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -8,32 +11,28 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    nano
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath intl
-RUN pecl install -o -f redis \
-&&  rm -rf /tmp/pear \
-&&  docker-php-ext-enable redis
-##zsh
-RUN apt-get update && apt-get install -y zsh fonts-powerline
-
-##xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-# Get latest Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Arguments defined in docker-compose.yml
-ARG uid
-
-# Create system user to run Composer and Symfony commands
-RUN useradd -G www-data,root -u $uid -d /home/app app
-RUN mkdir -p /home/app && \
+    nano  \
+#  zsh
+    zsh \
+    fonts-powerline && \
+#   Install PHP extensions
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath intl && \
+#    redis
+    pecl install -o -f redis  && \
+    docker-php-ext-enable redis && \
+#    xdebug
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
+#    clear
+    apt-get clean &&  \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/pear && \
+#    add user
+    useradd -G www-data,root -u $uid -d /home/app app && \
+    mkdir -p /home/app && \
     chown -R app:app /home/app
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
