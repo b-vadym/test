@@ -35,5 +35,12 @@
 
     <extensions>
         <extension class="App\Tests\Functional\ClearDbDumpListener"/>
+        <extension class="App\Tests\AutoReview\NotUsedRoutesExtension">
+            <arguments>
+                <string>request.log</string>
+                <array>
+                </array>
+            </arguments>
+        </extension>
     </extensions>
 </phpunit>

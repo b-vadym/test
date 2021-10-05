@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
 use Ergebnis\Classy\Construct;
 use Ergebnis\Classy\Constructs;
@@ -55,7 +54,7 @@ class LintAnnotationCommand extends Command
         $io->error(sprintf('Found %d issues.', \count($errors)));
 
         foreach ($errors as $error) {
-            $io->error($error->getMessage());
+            $io->error(get_debug_type($error) . $error->getMessage());
         }
 
         return 1;
@@ -64,8 +63,8 @@ class LintAnnotationCommand extends Command
     /**
      * @param string[] $classes
      * @psalm-param list<class-string> $classes
-     * @return AnnotationException[]
-     * @psalm-return list<AnnotationException>
+     * @return \Throwable[]
+     * @psalm-return list<\Throwable>
      */
     private function validateClasses(array $classes): array
     {
@@ -74,7 +73,7 @@ class LintAnnotationCommand extends Command
         foreach ($classes as $class) {
             try {
                 $this->validateClass($class);
-            } catch (AnnotationException $e) {
+            } catch (\Throwable $e) {
                 $exceptions[] = $e;
             }
         }
@@ -96,6 +95,26 @@ class LintAnnotationCommand extends Command
 
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $this->reader->getPropertyAnnotations($reflectionProperty);
+        }
+
+        $this->validateAttributes($reflectionClass->getAttributes());
+
+        foreach ($reflectionClass->getMethods() as $reflectionMethod) {
+            $this->validateAttributes($reflectionMethod->getAttributes());
+        }
+
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+            $this->validateAttributes($reflectionProperty->getAttributes());
+        }
+    }
+
+    /**
+     * @param \ReflectionAttribute[] $attributes
+     */
+    private function validateAttributes(array $attributes): void
+    {
+        foreach ($attributes as $attribute) {
+            $attribute->newInstance();
         }
     }
 

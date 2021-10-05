@@ -10,3 +10,8 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
+        request:
+            type: stream
+            path: "%kernel.logs_dir%/request.log"
+            level: debug
+            channels: ["request"]
