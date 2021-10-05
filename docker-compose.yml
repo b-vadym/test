@@ -3,14 +3,11 @@ services:
   php:
     build:
       args:
-        uid: ${APP_UID}
+        uid: 1000
       context: ./
       dockerfile: docker/php/Dockerfile
     restart: unless-stopped
     working_dir: /var/www/
-    env_file:
-      - .env
-      - .env.local
     environment:
       PHP_IDE_CONFIG: serverName=Docker
       TERM: xterm-256color
@@ -61,12 +58,9 @@ services:
   node:
     build:
       args:
-        uid: ${APP_UID}
+        uid: 1000
       context: ./
       dockerfile: docker/node/Dockerfile
-    env_file:
-      - .env
-      - .env.local
     environment:
       TERM: xterm-256color
     volumes:
