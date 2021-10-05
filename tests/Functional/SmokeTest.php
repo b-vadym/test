@@ -32,6 +32,7 @@ class SmokeTest extends WebTestCase
     {
         yield ['uri' => '/'];
         yield ['uri' => '/login'];
+        yield ['uri' => '/email'];
     }
 
     /**
@@ -51,6 +52,7 @@ class SmokeTest extends WebTestCase
     public function authorizedUserPagesIsSuccessfulDataProvider(): iterable
     {
         yield ['email' => 'v.bondarenko2991+testuser1@gmail.com', 'uri' => '/'];
+        yield ['email' => 'v.bondarenko2991+testuser1@gmail.com', 'uri' => '/email'];
     }
 
     /**

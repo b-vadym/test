@@ -26,6 +26,7 @@ services:
     depends_on:
       - db
       - redis
+      - mailhog
 
   db:
     image: mysql:8.0
@@ -87,3 +88,8 @@ services:
       - "59003:8081"
     depends_on:
       - redis
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - 59004:8025 # web ui
