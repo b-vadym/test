@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+
+$password = getenv('MYSQL_PWD');
+$options = getopt('u:h:P:', [], $optind);
+$pos_args = array_slice($argv, $optind);
+$database = $pos_args[0] ?? '';
+$user = $options['u'] ?? 'root';
+$host = $options['h'] ?? 'localhost';
+$port = $options['P'] ?? '3306';
+$db = new \PDO("mysql:host={$host};port={$port};dbname={$database}", $user, $password);
+$db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
+$db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+$sql = stream_get_contents(STDIN);
+
+try {
+    $stm = $db->prepare($sql);
+    if ($stm->execute() && $stm->rowCount() > 0 && $stm->columnCount() > 0) {
+        echo "\n";
+        foreach ($stm->fetchAll(\PDO::FETCH_NUM) as $item) {
+            echo implode('|', $item) . "\n";
+        }
+    }
+} catch (\PDOException $e) {
+    fprintf(STDERR, $e->getMessage() . "\n");
+    exit(1);
+}

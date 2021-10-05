@@ -9,7 +9,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
-class AppFixtures extends Fixture
+class UserFixtures extends Fixture
 {
     private PasswordHasherFactoryInterface $passwordHasherFactory;
 
@@ -21,7 +21,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $user = new User(
-            'v.bondarenko2991@gmail.com',
+            'v.bondarenko2991+testuser1@gmail.com',
             ['ROLE_USER'],
             $this->passwordHasherFactory->getPasswordHasher(User::class)->hash('pass1234'),
         );
