@@ -28,6 +28,7 @@ abstract class WebTestCase extends BaseWebTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+        /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
         $this->client = null;
         gc_collect_cycles();
     }

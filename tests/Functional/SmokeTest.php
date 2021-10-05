@@ -46,7 +46,7 @@ class SmokeTest extends WebTestCase
     }
 
     /**
-     * @return iterable<array-key, array{email: string, host: string, uri: string}>
+     * @return iterable<array-key, array{email: string, uri: string}>
      */
     public function authorizedUserPagesIsSuccessfulDataProvider(): iterable
     {
