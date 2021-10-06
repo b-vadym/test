@@ -1,0 +1,46 @@
+# Read the documentation: https://github.com/1up-lab/OneupFlysystemBundle
+oneup_flysystem:
+    adapters:
+        default_adapter:
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(MIN_IO_BUCKET_NAME)%'
+                prefix: ''
+    filesystems:
+        default_filesystem:
+            adapter: default_adapter
+            alias: League\Flysystem\Filesystem
+
+
+#parameters:
+#    s3_client_arguments:
+#        version: 'latest'
+#        region: 'storage1'
+#        endpoint: '%env(MIN_IO_ENDPOINT)%'
+#        use_path_style_endpoint: true
+#        credentials:
+#            key: '%env(MIN_IO_ACCESS_KEY)%'
+#            secret: '%env(MIN_IO_SECRET)%'
+#    s3_bucket_name: '%env(MIN_IO_BUCKET_NAME)%'
+#    s3_prefix: ''
+
+services:
+    Aws\S3\S3Client:
+        class: Aws\S3\S3Client
+        arguments:
+            - version: 'latest'
+              region: 'storage1'
+              endpoint: '%env(MIN_IO_ENDPOINT)%'
+              use_path_style_endpoint: true
+              credentials:
+                  key: '%env(MIN_IO_ACCESS_KEY)%'
+                  secret: '%env(MIN_IO_BUCKET_NAME)%'
+
+#flysystem:
+#    storages:
+#        public_uploads:
+#            adapter: 'aws'
+#            options:
+#                client: 'Aws\S3\S3Client'
+#                bucket: '%s3_bucket_name%'
+#                prefix: '%s3_prefix%'

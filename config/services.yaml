@@ -26,3 +26,12 @@ services:
     App\Command\LintAnnotationCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    App\DataFixtures\FileFactory:
+        arguments:
+            $filesystem: '@oneup_flysystem.default_filesystem_filesystem'
+            $mimeTypes: '@mime_types'
+
+    App\DataFixtures\ClearUploadDirFixtures:
+        arguments:
+            $filesystem: '@oneup_flysystem.default_filesystem_filesystem'

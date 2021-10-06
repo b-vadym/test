@@ -18,6 +18,8 @@
         "doctrine/orm": "^2.9",
         "ergebnis/classy": "^1.1",
         "ergebnis/composer-normalize": "^2.15",
+        "league/flysystem-aws-s3-v3": "^2.1",
+        "oneup/flysystem-bundle": "^4.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.3.*",
