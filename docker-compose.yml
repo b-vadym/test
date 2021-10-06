@@ -111,10 +111,10 @@ services:
       - minio
     entrypoint: >
       /bin/sh -c "
-        /usr/bin/mc alias set myminio http://minio:9000 minio_access_key minio_secret_key;
-        /usr/bin/mc mb myminio/public --region storage1;
-        /usr/bin/mc policy set download myminio/public;
-        /usr/bin/mc mb myminio/public-test --region storage1;
-        /usr/bin/mc policy set download myminio/public-test;
+        /usr/bin/mc alias set test-minio http://minio:9000 minio_access_key minio_secret_key;
+        /usr/bin/mc mb test-minio/public --region storage1;
+        /usr/bin/mc policy set download test-minio/public;
+        /usr/bin/mc mb test-minio/public-test --region storage1;
+        /usr/bin/mc policy set download test-minio/public-test;
         exit 0;
       "
