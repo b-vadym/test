@@ -20,6 +20,7 @@ parameters:
         use_path_style_endpoint: true
         credentials:
             key: '%env(MIN_IO_ACCESS_KEY)%'
+            secret: '%env(MIN_IO_SECRET)%'
 
 services:
     Aws\S3\S3Client:
