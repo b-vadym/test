@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -eu
+. "$(dirname $0)/.shrc"
+
+unsafe_bin
+
+PHP_CHECKSUM_FILE="$VAR_DIR/docker-compose/php.md5"
+PHP_DOCKERFILE="$BASE_DIR/docker/php/Dockerfile"
+
+if [ ! -f "$PHP_CHECKSUM_FILE" ]; then
+  write_title "Checksum file not found. Trigger build image php"
+  docker-compose down
+  docker-compose build php
+  md5sum "$PHP_DOCKERFILE" > "$PHP_CHECKSUM_FILE"
+
+else
+  set +e
+    md5sum --check "$PHP_CHECKSUM_FILE"  >/dev/null 2>&1
+    errcode=$?
+  set -e
+
+  if [ "$errcode" -ne 0 ]; then
+    write_title "Checksum not equals trigger build image php"
+    docker-compose down
+    docker-compose build php
+    md5sum "$PHP_DOCKERFILE" > "$PHP_CHECKSUM_FILE"
+  fi
+fi
+
+docker-compose up -d

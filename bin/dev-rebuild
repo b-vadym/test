@@ -40,7 +40,7 @@ else
     done
 fi
 
-docker-compose up -d
+exec_bin start-compose
 
 #if [ ! -z "$all" -o ! -z "$workers" ]; then
 #    set +e
