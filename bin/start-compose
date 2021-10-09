@@ -1,31 +1,36 @@
 #!/bin/sh
 
+verify_checksum_and_build_image () {
+  dockerfile_path="$1"
+  services_name="$2"
+  checksum_file="$VAR_DIR/docker-compose/$services_name.md5"
+
+  if [ ! -f "$checksum_file" ]; then
+    write_title "Checksum file not found. Trigger build image - $services_name"
+    docker-compose down
+    docker-compose build "$services_name"
+    md5sum "$dockerfile_path" > "$checksum_file"
+  else
+    set +e
+      md5sum --check "$checksum_file"  >/dev/null 2>&1
+      errcode=$?
+    set -e
+
+    if [ "$errcode" -ne 0 ]; then
+      write_title "Checksum not equals trigger build image - $services_name"
+      docker-compose down
+      docker-compose build "$services_name"
+      md5sum "$dockerfile_path" > "$checksum_file"
+    fi
+  fi
+}
+
 set -eu
 . "$(dirname $0)/.shrc"
 
 unsafe_bin
 
-PHP_CHECKSUM_FILE="$VAR_DIR/docker-compose/php.md5"
-PHP_DOCKERFILE="$BASE_DIR/docker/php/Dockerfile"
-
-if [ ! -f "$PHP_CHECKSUM_FILE" ]; then
-  write_title "Checksum file not found. Trigger build image php"
-  docker-compose down
-  docker-compose build php
-  md5sum "$PHP_DOCKERFILE" > "$PHP_CHECKSUM_FILE"
-
-else
-  set +e
-    md5sum --check "$PHP_CHECKSUM_FILE"  >/dev/null 2>&1
-    errcode=$?
-  set -e
-
-  if [ "$errcode" -ne 0 ]; then
-    write_title "Checksum not equals trigger build image php"
-    docker-compose down
-    docker-compose build php
-    md5sum "$PHP_DOCKERFILE" > "$PHP_CHECKSUM_FILE"
-  fi
-fi
+verify_checksum_and_build_image "$BASE_DIR/docker/php/Dockerfile" php
+verify_checksum_and_build_image "$BASE_DIR/docker/node/Dockerfile" node
 
 docker-compose up -d
