@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\File\File;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: 'string')]
     private string $password;
+
+    #[ORM\OneToOne(targetEntity: File::class)]
+    private ?File $avatar = null;
 
     /**
      * @param list<string> $roles
@@ -100,6 +104,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getAvatar(): ?File
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?File $avatar): void
+    {
+        if ($avatar) {
+            Assert::eq($avatar->getType(), File::TYPE_AVATAR);
+        }
+
+        $this->avatar = $avatar;
     }
 
     /**

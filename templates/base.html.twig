@@ -14,6 +14,14 @@
         {% endblock %}
     </head>
     <body>
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            user: {{ app.user.email }}
+
+            {% if app.user.avatar %}
+                <img src="{{ file_url(app.user.avatar) }}" alt="avatar"/>
+            {% endif %}
+        {% endif %}
         {% block body %}{% endblock %}
     </body>
 </html>

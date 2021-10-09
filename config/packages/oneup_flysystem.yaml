@@ -4,8 +4,8 @@ oneup_flysystem:
         default_adapter:
             awss3v3:
                 client: Aws\S3\S3Client
-                bucket: '%env(MIN_IO_BUCKET_NAME)%'
-                prefix: ''
+                bucket: '%app.file.bucket%'
+                prefix: '%app.file.prefix%'
     filesystems:
         default_filesystem:
             adapter: default_adapter
@@ -13,6 +13,8 @@ oneup_flysystem:
 
 
 parameters:
+    app.file.bucket: '%env(MIN_IO_BUCKET_NAME)%'
+    app.file.prefix: ''
     s3_client_arguments:
         version: 'latest'
         region: 'storage1'
@@ -27,3 +29,6 @@ services:
         class: Aws\S3\S3Client
         arguments:
             - '%s3_client_arguments%'
+    League\Flysystem\PathPrefixer:
+        arguments:
+            $prefix: '%app.file.prefix%'

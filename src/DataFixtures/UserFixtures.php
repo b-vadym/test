@@ -36,6 +36,7 @@ class UserFixtures extends Fixture
             'avatar.jpg',
             'bd4cfb5b-978c-46d9-9af1-0387ba99cc54',
         );
+        $user->setAvatar($file);
         $manager->persist($file);
 
         $manager->flush();

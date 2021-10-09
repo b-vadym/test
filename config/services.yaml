@@ -35,3 +35,7 @@ services:
     App\DataFixtures\ClearUploadDirFixtures:
         arguments:
             $filesystem: '@oneup_flysystem.default_filesystem_filesystem'
+
+    App\File\PublicUrlGenerator:
+        arguments:
+            $bucket: '%app.file.bucket%'
