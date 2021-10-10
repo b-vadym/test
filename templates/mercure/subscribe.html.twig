@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mercure subscribe{% endblock %}
+
+{% block body %}
+    <script>
+        // URL is a built-in JavaScript class to manipulate URLs
+        const url = new URL({{ mercure_url|json_encode|raw }}, window.origin);
+        url.searchParams.append('topic', 'http://example.com/books/1');
+        // Subscribe to updates of several Book resources
+        url.searchParams.append('topic', 'http://example.com/books/2');
+        // All Review resources will match this pattern
+        url.searchParams.append('topic', 'http://example.com/reviews/{id}');
+
+        const eventSource = new EventSource(url);
+        eventSource.onmessage = event => {
+            console.log(JSON.parse(event.data));
+        }
+    </script>
+{% endblock %}
