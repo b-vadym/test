@@ -24,11 +24,15 @@ clear-cache: ## Remove symfony cache and logs
 cache-warmup: clear-cache vendor ## Symfony cache warmup
 	$(SYMFONY) cache:warmup
 
-.PHONY: install ## install project
-install: clear-cache start vendor cache-warmup db assets
+.PHONY: install
+install: clear-cache start vendor cache-warmup db assets ## install project
 
-.PHONY: reinstall ## Reinstall project
-reinstall: down install
+.PHONY: reinstall
+reinstall: down build install  ## Reinstall project
+
+.PHONY: build
+build: down ## Rebuild images
+	$(DOCKER_COMPOSE) build
 
 vendor: composer.lock ## Install vendor
 	$(COMPOSER) install
