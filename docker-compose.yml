@@ -22,6 +22,7 @@ services:
       - ./var/hist-php/:/home/app/zsh/
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "test-minio.vadim.visual:host-gateway"
     depends_on:
       - db
       - redis
