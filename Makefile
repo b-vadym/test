@@ -57,7 +57,7 @@ assets: vendor start cache-warmup node_modules ## Installing assets
 	$(YARN) encore dev
 
 ##
-## run schell
+## run shell
 ## -----------------------
 .PHONY: zsh-php
 zsh-php: ## zsh in php container

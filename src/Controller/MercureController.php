@@ -30,7 +30,7 @@ class MercureController extends AbstractController
     public function subscribing(HubInterface $hub): Response
     {
         return $this->render('/mercure/subscribe.html.twig', [
-            'mercure_url' => $hub->getPublicUrl()
+            'mercure_url' => $hub->getPublicUrl(),
         ]);
     }
 }
