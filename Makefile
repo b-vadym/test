@@ -2,6 +2,7 @@ DOCKER_COMPOSE = docker-compose
 EXEC_PHP       = $(DOCKER_COMPOSE) exec  php
 SYMFONY        = $(EXEC_PHP) bin/console
 COMPOSER       = $(EXEC_PHP) composer
+EXEC_NODE      = $(DOCKER_COMPOSE) run --rm node
 YARN           = $(DOCKER_COMPOSE) run --rm node yarn
 
 ##
@@ -54,6 +55,26 @@ node_modules: start yarn.lock ## install node modules
 assets: vendor start cache-warmup node_modules ## Installing assets
 	$(SYMFONY) assets:install --symlink
 	$(YARN) encore dev
+
+##
+## run schell
+## -----------------------
+.PHONY: zsh-php
+zsh-php: ## zsh in php container
+	$(EXEC_PHP) zsh
+
+.PHONY: zsh-node
+zsh-node: ## zsh in node container
+	$(EXEC_NODE) zsh
+
+.PHONY: bash-php
+bash-php:  ## bash in php container
+	$(EXEC_PHP) bash
+
+.PHONY: bash-node
+bash-node:  ## bash in node container
+	$(EXEC_NODE) bash
+
 ##
 ## help
 ## -----------------------
