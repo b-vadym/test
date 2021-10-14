@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>
+        634*475
+        <img src="{{ optimize_file_url(file, 634, 475) }}" alt="optimize_avatar"/>
+    </div>
+    <div>
+        original
+        <img src="{{ file_url(file) }}" alt="avatar"/>
+    </div>
+{% endblock %}
