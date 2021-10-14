@@ -39,3 +39,9 @@ services:
     App\File\PublicUrlGenerator:
         arguments:
             $bucket: '%app.file.bucket%'
+
+    Imgproxy\UrlBuilder:
+        arguments:
+            $baseUrl: '%env(IMGPROXY_BASE_URL)%'
+            $key: '%env(IMGPROXY_KEY)%'
+            $salt: '%env(IMGPROXY_SALT)%'

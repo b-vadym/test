@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0e168f0211cc73bd64e3eb008afc7a6",
+    "content-hash": "1d293a769fce341eb9534203936eac87",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -219,6 +219,57 @@
                 }
             ],
             "time": "2021-09-13T08:41:34+00:00"
+        },
+        {
+            "name": "crocodile2u/imgproxy-php",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crocodile2u/imgproxy-php.git",
+                "reference": "31a919c4ff70d2954a174d56f917f899209fef78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crocodile2u/imgproxy-php/zipball/31a919c4ff70d2954a174d56f917f899209fef78",
+                "reference": "31a919c4ff70d2954a174d56f917f899209fef78",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Imgproxy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Victor Bolshov",
+                    "email": "crocodile2u@gmail.com",
+                    "homepage": "https://github.com/crocodile2u",
+                    "role": "Developer"
+                }
+            ],
+            "description": "URL generator for darthsim/imgproxy",
+            "keywords": [
+                "darthsim",
+                "generator",
+                "imgproxy",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/crocodile2u/imgproxy-php/issues",
+                "source": "https://github.com/crocodile2u/imgproxy-php/tree/v2.0.0"
+            },
+            "time": "2021-09-28T09:45:45+00:00"
         },
         {
             "name": "doctrine/annotations",

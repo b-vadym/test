@@ -19,7 +19,22 @@
             user: {{ app.user.email }}
 
             {% if app.user.avatar %}
-                <img src="{{ file_url(app.user.avatar) }}" alt="avatar"/>
+                <div>
+                    100*100
+                    <img src="{{ optimize_file_url(app.user.avatar, 100, 100) }}" alt="optimize_avatar"/>
+                </div>
+                <div>
+                    2000*2000
+                    <img src="{{ optimize_file_url(app.user.avatar, 2000, 2000) }}" alt="optimize_avatar"/>
+                </div>
+                <div>
+                    10*1000
+                    <img src="{{ optimize_file_url(app.user.avatar, 10, 1000) }}" alt="optimize_avatar"/>
+                </div>
+                <div>
+                    original
+                    <img src="{{ file_url(app.user.avatar) }}" alt="avatar"/>
+                </div>
             {% endif %}
         {% endif %}
         {% block body %}{% endblock %}

@@ -23,6 +23,9 @@
     "composer/xdebug-handler": {
         "version": "2.0.2"
     },
+    "crocodile2u/imgproxy-php": {
+        "version": "v2.0.0"
+    },
     "dnoegel/php-xdg-base-dir": {
         "version": "v0.1.1"
     },
