@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Sentry\SentryPlugin;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -15,6 +16,24 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function registerBundles(): iterable
+    {
+        $contents = require $this->getProjectDir() . '/config/bundles.php';
+
+        foreach ($contents as $class => $envs) {
+            if ($class === \EightPoints\Bundle\GuzzleBundle\EightPointsGuzzleBundle::class) {
+                yield new $class([
+                    new SentryPlugin(),
+                ]);
+            } else {
+                yield new $class();
+            }
+        }
+    }
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
