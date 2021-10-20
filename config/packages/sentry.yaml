@@ -1,0 +1,28 @@
+sentry:
+    dsn: '%env(SENTRY_DSN)%'
+    messenger:
+        enabled: true # flushes Sentry messages at the end of each message handling
+        capture_soft_fails: true # captures exceptions marked for retry too
+    options:
+        release: '%env(RELEASE_VERSION)%' #your app version
+        send_default_pii: true
+        integrations:
+            - 'Sentry\Integration\IgnoreErrorsIntegration'
+        traces_sample_rate: 1
+        sample_rate: 1
+    tracing:
+        enabled: true
+        dbal: # DB queries
+            enabled: true
+        cache:
+            enabled: true
+        twig: # templating engine
+            enabled: true
+
+services:
+    Sentry\Integration\IgnoreErrorsIntegration:
+        arguments:
+            $options:
+                ignore_exceptions:
+#                    - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+                    - Symfony\Component\Security\Core\Exception\AccessDeniedException
