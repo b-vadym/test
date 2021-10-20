@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Sentry\SentryPlugin;
+use EightPoints\Bundle\GuzzleBundle\EightPointsGuzzleBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -22,15 +23,18 @@ class Kernel extends BaseKernel
      */
     public function registerBundles(): iterable
     {
+        /** @psalm-var array<class-string<\Symfony\Component\HttpKernel\Bundle\BundleInterface>, array<string, bool>> $contents */
         $contents = require $this->getProjectDir() . '/config/bundles.php';
 
         foreach ($contents as $class => $envs) {
-            if ($class === \EightPoints\Bundle\GuzzleBundle\EightPointsGuzzleBundle::class) {
-                yield new $class([
-                    new SentryPlugin(),
-                ]);
-            } else {
-                yield new $class();
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                if ($class === EightPointsGuzzleBundle::class) {
+                    yield new $class([
+                        new SentryPlugin(),
+                    ]);
+                } else {
+                    yield new $class();
+                }
             }
         }
     }
