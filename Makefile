@@ -10,6 +10,7 @@ YARN           = $(DOCKER_COMPOSE) run --rm node yarn
 ## -----------------------
 .PHONY: start
 start: ## Start docker compose
+	bin/start-compose
 	$(DOCKER_COMPOSE) up --remove-orphans --no-recreate --detach
 
 .PHONY: down
@@ -28,12 +29,8 @@ cache-warmup: clear-cache vendor ## Symfony cache warmup
 .PHONY: install
 install: clear-cache start vendor cache-warmup db assets ## install project
 
-.PHONY: reinstall
-reinstall: down build install  ## Reinstall project
-
-.PHONY: build
-build: down ## Rebuild images
-	$(DOCKER_COMPOSE) build
+.PHONY: rebuild
+rebuild: down install  ## Rebuild project
 
 vendor: composer.lock ## Install vendor
 	$(COMPOSER) install
