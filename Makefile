@@ -8,8 +8,8 @@ YARN           = $(DOCKER_COMPOSE) run --rm node yarn
 ##
 ## Project main
 ## -----------------------
-.PHONY: start
-start: ## Start docker compose
+.PHONY: up
+start: ## ocker compose up
 	bin/start-compose
 	$(DOCKER_COMPOSE) up --remove-orphans --no-recreate --detach
 
@@ -34,6 +34,7 @@ rebuild: down install  ## Rebuild project
 
 vendor: composer.lock ## Install vendor
 	$(COMPOSER) install
+	touch vendor
 
 .PHONY: db
 db: vendor clear-cache cache-warmup start ## Recreate db and load fixtures
@@ -47,6 +48,7 @@ db: vendor clear-cache cache-warmup start ## Recreate db and load fixtures
 
 node_modules: start yarn.lock ## install node modules
 	$(YARN) install
+	touch node_modules
 
 .PHONY: assets
 assets: vendor start cache-warmup node_modules ## Installing assets
@@ -72,6 +74,12 @@ bash-php:  ## bash in php container
 bash-node:  ## bash in node container
 	$(EXEC_NODE) bash
 
+##
+## dev tools
+## -----------------------
+.PHONY: lint
+lint: vendor
+	$(EXEC_PHP) composer lint
 ##
 ## help
 ## -----------------------
