@@ -15,11 +15,11 @@ services:
       - ./:/var/www
       - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
-      - ./var/composer/:/home/app/.composer/
       - ./docker/php/bin/:/home/app/bin/
       - ./docker/php/.bashrc:/home/app/.bashrc
-      - ./var/hist-php/:/home/app/bash/
-      - ./var/hist-php/:/home/app/zsh/
+      - composer-cache:/home/app/.composer/
+      - php-bash-hist:/home/app/bash/
+      - php-zsh-hist:/home/app/zsh/
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "test-minio.vadim.visual:host-gateway"
@@ -38,6 +38,8 @@ services:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_PASSWORD: test
       MYSQL_USER: test
+    volumes:
+      - mysql-data:/var/lib/mysql
 
   nginx:
     image: nginx:1.21
@@ -68,15 +70,17 @@ services:
       TERM: xterm-256color
     volumes:
       - ./:/var/www
-      - ./var/yarn/:/home/node/.cache/yarn/
       - ./docker/node/.bashrc:/home/node/.bashrc
-      - ./var/hist-node/:/home/node/bash/
-      - ./var/hist-node/:/home/node/zsh/
+      - node-cache:/home/node/.cache/
+      - node-bash-hist:/home/node/bash/
+      - node-zsh-hist:/home/node/zsh/
 
   redis:
     image: "redis:6.2"
     command: "redis-server --appendonly yes"
     restart: unless-stopped
+    volumes:
+      - redis-data:/data
 
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -135,6 +139,9 @@ services:
     ports:
       - "59007:80"
       - "59008:443"
+    volumes:
+      - mercure_data:/data
+      - mercure_config:/config
 
   imgproxy:
     image: darthsim/imgproxy:v2.17
@@ -157,3 +164,15 @@ services:
         - "test-minio.vadim.visual:host-gateway"
     depends_on:
       - minio
+
+volumes:
+    composer-cache: ~
+    php-zsh-hist: ~
+    php-bash-hist: ~
+    node-cache: ~
+    node-zsh-hist: ~
+    node-bash-hist: ~
+    mysql-data: ~
+    redis-data: ~
+    mercure_data: ~
+    mercure_config: ~

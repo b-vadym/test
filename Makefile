@@ -1,5 +1,5 @@
 DOCKER_COMPOSE = docker-compose
-EXEC_PHP       = $(DOCKER_COMPOSE) exec  php
+EXEC_PHP       = $(DOCKER_COMPOSE) exec php
 SYMFONY        = $(EXEC_PHP) bin/console
 COMPOSER       = $(EXEC_PHP) composer
 EXEC_NODE      = $(DOCKER_COMPOSE) run --rm node
@@ -9,7 +9,7 @@ YARN           = $(DOCKER_COMPOSE) run --rm node yarn
 ## Project main
 ## -----------------------
 .PHONY: up
-start: ## ocker compose up
+up: ## ocker compose up
 	bin/start-compose
 	$(DOCKER_COMPOSE) up --remove-orphans --no-recreate --detach
 
@@ -27,17 +27,17 @@ cache-warmup: clear-cache vendor ## Symfony cache warmup
 	$(SYMFONY) cache:warmup
 
 .PHONY: install
-install: clear-cache start vendor cache-warmup db assets ## install project
+install: clear-cache vendor cache-warmup db assets ## install project
 
 .PHONY: rebuild
-rebuild: down install  ## Rebuild project
+rebuild: install  ## Rebuild project
 
 vendor: composer.lock ## Install vendor
 	$(COMPOSER) install
 	touch vendor
 
 .PHONY: db
-db: vendor clear-cache cache-warmup start ## Recreate db and load fixtures
+db: vendor clear-cache cache-warmup ## Recreate db and load fixtures
 	$(EXEC_PHP) bin/mysql-check-alive
 	$(SYMFONY) doctrine:database:drop --force --quiet
 	$(SYMFONY) doctrine:database:create --if-not-exists
@@ -46,12 +46,12 @@ db: vendor clear-cache cache-warmup start ## Recreate db and load fixtures
 	$(SYMFONY) doctrine:migrations:version --add --all --no-interaction
 	$(SYMFONY) doctrine:fixtures:load --append
 
-node_modules: start yarn.lock ## install node modules
+node_modules: yarn.lock ## install node modules
 	$(YARN) install
 	touch node_modules
 
 .PHONY: assets
-assets: vendor start cache-warmup node_modules ## Installing assets
+assets: vendor cache-warmup node_modules ## Installing assets
 	$(SYMFONY) assets:install --symlink
 	$(YARN) encore dev
 

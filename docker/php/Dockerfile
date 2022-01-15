@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 # Arguments defined in docker-compose.yml
 ARG uid
@@ -39,7 +39,8 @@ WORKDIR /var/www
 
 USER app
 
-RUN sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
+RUN  mkdir /home/app/bash && mkdir /home/app/zsh && mkdir /home/app/.composer && \
+   sh -c "$(curl -fsSL https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
    -t powerlevel10k/powerlevel10k  \
    -p composer  \
    -p symfony2  \
